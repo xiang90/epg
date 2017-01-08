@@ -8,6 +8,7 @@ import (
 	"github.com/coreos/etcd/clientv3"
 	"github.com/coreos/etcd/clientv3/mirror"
 	_ "github.com/lib/pq"
+	"github.com/xiang90/edb"
 )
 
 func main() {
@@ -25,12 +26,12 @@ func main() {
 	}
 	syncer := mirror.NewSyncer(etcd, "", 0)
 
-	dbs := &dbSyncer{
-		table: "kvs",
+	dbs := &edb.SQLDBSyncer{
+		Table: "kvs",
 
-		src:  syncer,
-		dest: db,
+		Syncer: syncer,
+		DB:     db,
 	}
 
-	log.Fatal(dbs.sync(context.Background()))
+	log.Fatal(dbs.Sync(context.Background()))
 }
