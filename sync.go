@@ -26,7 +26,7 @@ func (ds *dbSyncer) sync(ctx context.Context) error {
 	)
 
 	if ds.noOverwrite {
-		stmt, err = ds.dest.Prepare(fmt.Sprintf("INSERT INTO %s(key,event,value,revision) VALUES ($1,$2,$3,$4)", ds.table))
+		stmt, err = ds.dest.Prepare(fmt.Sprintf("INSERT INTO %s(key,event,value,revision) VALUES ($1,$2,$3,$4) ON CONFLICT(revision) DO NOTHING", ds.table))
 		if err != nil {
 			return err
 		}
